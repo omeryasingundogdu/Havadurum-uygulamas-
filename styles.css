@@ -807,15 +807,4 @@ html {
   padding: 10px;
 }
 
-.content,
-.map-container,
-.map-button,
-.altbar,
-.forecast-buttons,
-.forecast-popup,
-.loading,
-.settings-button,
-.settings-panel {
-  transform: none;
-  transform-origin: initial;
-}
+
