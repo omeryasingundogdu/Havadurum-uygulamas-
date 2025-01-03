@@ -1,2 +1,3 @@
 # Havadurum-uygulaması
-bir havadurumu uygulamasıdır.
+[bu siteye giderek test edebilirsiniz!
+](https://omeryasingundogdu.github.io/Havadurum-uygulamas-/)
