@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hava Durumu</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="assets/final.jpg">
+  </head>
+  <body>
+    <input id="search-locate" type="text" placeholder="Search weather..." />
+
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="map-container">
+      <button class="close-map" id="close-map">&times;</button>
+      <iframe
+        id="map"
+        frameborder="0"
+        scrolling="no"
+        marginheight="0"
+        marginwidth="0"
+        src="https://www.openstreetmap.org/export/embed.html"
+        style="border: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);"
+      ></iframe>
+    </div>
+
+    <div class="content">
+      <div class="map-button" onclick="show()"></div>
+      <div class="sehir">SEARCH NOW!</div>
+      <div class="derece"></div>
+      <div class="hissedilen :"></div> 
+      <div class="wind-speed"></div>
+      <div class="ruzgar"></div>
+      <div class="minmax"></div>
+      <img class="icon" src="assets/search-city.png"></img>
+    </div>
+
+    <div class="weather-altbar" id="weather-altbar">
+      <div class="altbar">
+        <div class="bugun" id="current-temp">
+          <img src="" alt="icon" class="alt-icon">
+          <div class="other">
+            <div class="day-bugun"></div>
+            <div class="temp"></div>
+          </div>
+        </div>
+        <div class="havadurumu-alt">    
+          <div class="gun"></div>
+          <img src="" alt="weather icon" class="w-icon">
+          <div class="temp"> </div>
+        </div>
+        <div class="havadurumu-alt">
+          <div class="gun"></div>
+          <img src="" alt="weather icon" class="w-icon">
+          <div class="temp"> </div>
+        </div>
+        <div class="havadurumu-alt">
+          <div class="gun"></div>
+          <img src="" alt="weather icon" class="w-icon">
+          <div class="temp"> </div>
+        </div>
+        <div class="havadurumu-alt">
+          <div class="gun"></div>
+          <img src="" alt="weather icon" class="w-icon">
+          <div class="temp"> </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="forecast-buttons">
+      <button class="forecast-btn active" onclick="changeForecast(5)">5 Günlük</button>
+      <button class="forecast-btn" onclick="showForecastPopup(16)">16 Günlük</button>
+    </div>
+
+    <div id="forecast-popup" class="forecast-popup">
+        <div class="popup-content">
+            <button class="close-popup" onclick="hideForecastPopup()">&times;</button>
+            <div class="popup-forecast-container"></div>
+        </div>
+    </div>
+
+    <div class="settings-button" onclick="toggleSettings()">⚙️</div>
+    
+    <div class="settings-panel">
+      <div class="settings-header">
+        <h3>Ayarlar</h3>
+        <button class="close-settings" onclick="toggleSettings()">&times;</button>
+      </div>
+
+      <div class="settings-section">
+        <h4>Dil Seçimi</h4>
+        <select id="language-select" onchange="changeLanguage(this.value)">
+          <option value="tr">Türkçe</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </div>
+
+      <div class="wallpaper-options">
+        <h4>Hava Durumuna Göre Arka Planlar</h4>
+        <div class="wallpaper-grid">
+          <div class="wallpaper-item" onclick="changeWallpaper('clear', 'https://images.unsplash.com/photo-1601297183305-6df142704ea2')">
+            <img src="https://images.unsplash.com/photo-1601297183305-6df142704ea2?w=100" alt="Açık Hava">
+            <span>Açık Hava</span>
+          </div>
+          <div class="wallpaper-item" onclick="changeWallpaper('clouds', 'https://images.unsplash.com/photo-1483977399921-6cf94f6fdc3a')">
+            <img src="https://images.unsplash.com/photo-1483977399921-6cf94f6fdc3a?w=100" alt="Bulutlu">
+            <span>Bulutlu</span>
+          </div>
+          <div class="wallpaper-item" onclick="changeWallpaper('rain', 'https://images.unsplash.com/photo-1519692933481-e162a57d6721')">
+            <img src="https://images.unsplash.com/photo-1519692933481-e162a57d6721?w=100" alt="Yağmurlu">
+            <span>Yağmurlu</span>
+          </div>
+          <div class="wallpaper-item" onclick="changeWallpaper('snow', 'https://images.unsplash.com/photo-1542601098-8fc114e148e2')">
+            <img src="https://images.unsplash.com/photo-1542601098-8fc114e148e2?w=100" alt="Karlı">
+            <span>Karlı</span>
+          </div>
+          <div class="wallpaper-item" onclick="changeWallpaper('mist', 'https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227')">
+            <img src="https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227?w=100" alt="Sisli">
+            <span>Sisli</span>
+          </div>
+          <div class="wallpaper-item" onclick="changeWallpaper('night', 'https://images.unsplash.com/photo-1507400492013-162706c8c05e')">
+            <img src="https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=100" alt="Gece">
+            <span>Gece</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="loading" class="loading">Yükleniyor...</div>
+
+    <script>
+        const weatherBackgrounds = {
+            clear: 'https://images.unsplash.com/photo-1601297183305-6df142704ea2',
+            clouds: 'https://images.unsplash.com/photo-1483977399921-6cf94f6fdc3a',
+            rain: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0',
+            thunderstorm: 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28',
+            snow: 'https://images.unsplash.com/photo-1542601098-8fc114e148e2',
+            mist: 'https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227',
+            night: 'https://images.unsplash.com/photo-1532074205216-d0e1f4b87368'
+    };
+
+        function changeBackground(weatherType) {
+            const hour = new Date().getHours();
+            if (hour >= 20 || hour < 6) {
+                document.body.style.backgroundImage = `url('${weatherBackgrounds.night}')`;
+                return;
+            }
+
+            const weatherMapping = {
+                'Clear': 'clear',
+                'Clouds': 'clouds',
+                'Rain': 'rain',
+                'Drizzle': 'rain',
+                'Thunderstorm': 'thunderstorm',
+                'Snow': 'snow',
+                'Mist': 'mist',
+                'Fog': 'mist',
+                'Haze': 'mist'
+            };
+
+            const background = weatherBackgrounds[weatherMapping[weatherType] || 'clear'];
+            document.body.style.backgroundImage = `url('${background}')`;
+        }
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
