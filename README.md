@@ -1,2 +1,2 @@
-# Havadurum-uygulamas-
+# Havadurum-uygulaması
 bir havadurumu uygulamasıdır.
