@@ -4,10 +4,8 @@ const WEATHER_API = "https://api.open-meteo.com/v1/forecast";
 let currentForecastDays = 5;
 let lastSearchValue = "";
 
-// Ayarlar paneli için değişkenler
 let customWallpapers = {};
 
-// Dil çevirileri
 const translations = {
   tr: {
     searchPlaceholder: "Hava durumunu ara...",
@@ -483,20 +481,17 @@ function toggleSettings() {
     : "rotate(0)";
 }
 
-// Sayfa yüklendiğinde kaydedilmiş arkaplanı yükle
 document.addEventListener("DOMContentLoaded", () => {
-  // Kaydedilmiş arkaplanları yükle
+
   const savedWallpapers = localStorage.getItem("customWallpapers");
   if (savedWallpapers) {
     customWallpapers = JSON.parse(savedWallpapers);
 
-    // Son seçilen arkaplanı uygula
     const lastWallpaper = localStorage.getItem("lastWallpaper");
     if (lastWallpaper) {
       const { type, url } = JSON.parse(lastWallpaper);
       document.body.style.backgroundImage = `url('${url}')`;
 
-      // Seçili olan duvar kağıdını görsel olarak işaretle
       document.querySelectorAll(".wallpaper-item").forEach((item) => {
         if (item.getAttribute("onclick").includes(type)) {
           item.style.border = "2px solid #fff";
@@ -507,26 +502,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function changeWallpaper(type, url) {
-  // Seçilen duvar kağıdını kaydet
+
   customWallpapers[type] = url;
 
-  // CustomWallpapers'ı localStorage'a kaydet
   localStorage.setItem("customWallpapers", JSON.stringify(customWallpapers));
 
-  // Son seçilen arkaplanı kaydet
   localStorage.setItem("lastWallpaper", JSON.stringify({ type, url }));
 
-  // Hemen arka planı değiştir
   document.body.style.backgroundImage = `url('${url}')`;
 
-  // Seçilen öğeye aktif sınıfı ekle
   document.querySelectorAll(".wallpaper-item").forEach((item) => {
     item.style.border = "none";
   });
   event.currentTarget.style.border = "2px solid #fff";
 }
 
-// Mevcut changeBackground fonksiyonunu güncelle
 function changeBackground(weatherType) {
   const hour = new Date().getHours();
   if (hour >= 20 || hour < 6) {
@@ -553,7 +543,6 @@ function changeBackground(weatherType) {
   document.body.style.backgroundImage = `url('${backgroundUrl}')`;
 }
 
-// Sayfa yüklendiğinde dil ayarını kontrol et
 document.addEventListener("DOMContentLoaded", () => {
   const savedLanguage = localStorage.getItem("language") || "tr";
   document.getElementById("language-select").value = savedLanguage;
@@ -561,12 +550,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function changeLanguage(lang) {
-  // Dil seçimini kaydet
+
   localStorage.setItem("language", lang);
 
   const texts = translations[lang];
 
-  // Metin içeriklerini güncelle
   document.getElementById("search-locate").placeholder =
     texts.searchPlaceholder;
   document.querySelector(".settings-header h3").textContent = texts.settings;
@@ -574,20 +562,16 @@ function changeLanguage(lang) {
   document.querySelector(".wallpaper-options h4").textContent =
     texts.backgrounds;
 
-  // Hava durumu butonlarını güncelle
   document.querySelectorAll(".forecast-btn")[0].textContent = texts.forecast5;
   document.querySelectorAll(".forecast-btn")[1].textContent = texts.forecast16;
 
-  // Arkaplan seçeneklerini güncelle
   document.querySelectorAll(".wallpaper-item span").forEach((span) => {
     const type = span.parentElement.getAttribute("onclick").match(/'(\w+)'/)[1];
     span.textContent = texts[type];
   });
 
-  // Yükleniyor metnini güncelle
   document.getElementById("loading").textContent = texts.loading;
 
-  // Mevcut hava durumu bilgilerini güncelle
   const searchValue = arama.value.trim();
   if (searchValue) {
     getCoordinates(searchValue);
